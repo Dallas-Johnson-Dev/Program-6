@@ -38,10 +38,7 @@ int main(int argc, char** argv) {
         cout << "Our byte count is " << indexByteCount << endl;
     getIndexCount(indexByteCount, indexCount, fileLength);
         cout << "Our index count is " << indexCount << endl;
-    //doShellSort(fileStream, indexByteCount, indexCount);
-    buffer = readData(0);
-    writeRecord()
-    cout << buffer << endl;
+    doShellSort(indexCount);
 
 fileStream.close();
 //REMOVE THE SYSTEM PAUSE TO COMPILE ON LINUX!!!!
@@ -70,16 +67,37 @@ void getIndexCount(int bufferSize, int &outputVariable, int lengthOfFile) {
 }
 
 //uses the shell sort method to alphabetize the file. Takes in the actual stream itself to do this and will output directly to it from this method as well.
-void doShellSort(int byteCount, int numIndexes) {
-    fileStream.seekg(4);
-int d = numIndexes; //We'll try setting the shell sort variable to the number of indexes. I'll have to actually remove that four byte set from the string before doing this.
-	while (d > 1) {
-		d = (d==2) ? 1 : d%2==1 ? (d+1)/2 : d%4==0 ? d/2+1 : d/2+2; //turnery operator for the shell sort to work.
-            cout << d << endl;
-			}
-	}
+void doShellSort(int numIndexes) {
+    int diff = numIndexes;
+    //sorting magic
+    //The ternary operator wasn't much help with this one, so if I understand this correctly it essentially halves the distance between each piece it's sorting until they're one apart.
+    //We probably went over that in class, but looking at this in one line is horrifyingly intimidating :/
+    while (diff > 1){
+		if (diff == 2){
+			diff = 1;
+		}
+		else if (diff % 2 == 1){
+			diff = (diff + 1) / 2;
+		}
+		else if (diff % 4 == 0){
+			diff = (diff / 2) + 1;
+		}
+		else{
+			diff = (diff / 2) + 2;
+		}
+        //Now to handle the swapping.
+        //Note to self: even though this says difference and numIndexes in the same line, don't confuse them. difference will change, numIndexes will not.
+        for (int i = diff; i < numIndexes; i++) {
+            for (int j = i - diff; j >= 0 && readData(j) > readData(j + diff); j-= diff) {
+                string tempSwap = readData(j);
+                writeData(j, readData(j+diff));
+                writeData(j+diff, tempSwap);
+            }
+        }
+    }
+}
 
-//reads the record into our buffer
+//We'll use this to return a string to our buffer.
 //does a simple for loop to read the record. REMEMBER: 4 + WHATEVER YOU USE!!
 //We need to do this by the amount of indexes in the file. I screwed this up a second ago...
 string readData(int index) {
@@ -97,7 +115,7 @@ string readData(int index) {
 //Should probably put a safeguard on this to make sure that it can't overwrite crucial data. (or maybe not, we're not writing a memory hacking program)
 void writeData(int index, string data) {
     fileStream.seekg(4+(index * indexByteCount),ios::beg);
-    for (int i < 0; i < data.length(); i++) {
+    for (int i = 0; i < data.length(); i++) {
         fileStream << data[i];
     }
 
