@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
 
 fileStream.close();
 //REMOVE THE SYSTEM PAUSE TO COMPILE ON LINUX!!!!
-system ("pause");
+//system ("pause");
 return 0;
 }
 
