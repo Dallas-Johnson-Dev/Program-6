@@ -16,6 +16,7 @@ int indexCount;
 int fileLength;
 fstream fileStream;
 
+//Where everything int he program starts. I used helper methods to handle everything from Writing to reading and the shell sort as well.
 int main(int argc, char** argv) {
     string f_name = "";
     string buffer = "";
