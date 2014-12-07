@@ -15,5 +15,7 @@ using namespace std;
 int main(int argc, char** argv);
 void getByteCount(string inputBuffer, int& outputVariable);
 void getIndexCount(int bufferSize, int& outputVariable, int lengthOfFile);
-void doShellSort(fstream &inputStream, int byteCount, int numIndexes);
+void doShellSort(int byteCount, int numIndexes);
+string readData(int index);
+void writeData(int index, string data);
 #endif
